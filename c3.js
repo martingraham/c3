@@ -1257,7 +1257,7 @@
             donut_expand: {},
             donut_expand_duration: 50,
             // spline
-            spline_interpolation_type: 'cardinal',
+            spline_interpolation_type: 'monotone',
             // region - region to change style
             regions: [],
             // tooltip - show when mouseover on each data
