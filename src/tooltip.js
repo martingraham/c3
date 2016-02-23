@@ -33,9 +33,14 @@ c3_chart_internal_fn.getTooltipContent = function (d, defaultTitleFormat, defaul
         orderAsc = $$.isOrderAsc();
 
     if (config.data_groups.length === 0) {
+        // mjg
+        /*  no sort
         d.sort(function(a,b){
-            return orderAsc ? a.value - b.value : b.value - a.value;
-        });
+            var av = a ? a.value : 0;
+            var bv = b ? b.value : 0;
+            return orderAsc ? av - bv : bv - av;
+        });  
+        */
     } else {
         var ids = $$.orderTargets($$.data.targets).map(function (i) {
             return i.id;
