@@ -33,10 +33,20 @@ c3_chart_internal_fn.getTooltipContent = function (d, defaultTitleFormat, defaul
         orderAsc = $$.isOrderAsc();
 
     if (config.data_groups.length === 0) {
+                    // mjg
+            /*  no sort
+            d.sort(function(a,b){
+                var av = a ? a.value : 0;
+                var bv = b ? b.value : 0;
+                return orderAsc ? av - bv : bv - av;
+            });  
+            */
+        /*
         d.sort(function(a, b){
             var v1 = a ? a.value : null, v2 = b ? b.value : null;
             return orderAsc ? v1 - v2 : v2 - v1;
         });
+        */
     } else {
         var ids = $$.orderTargets($$.data.targets).map(function (i) {
             return i.id;
@@ -59,7 +69,8 @@ c3_chart_internal_fn.getTooltipContent = function (d, defaultTitleFormat, defaul
             text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
         }
 
-        value = sanitise(valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d));
+        value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d);
+       // value = sanitise(valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d)); // mjg
         if (value !== undefined) {
             // Skip elements when their name is set to null
             if (d[i].name === null) { continue; }

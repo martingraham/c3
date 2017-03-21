@@ -31,7 +31,7 @@ c3_chart_internal_fn.initSubchart = function () {
 
     // Add extent rect for Brush
     context.append("g")
-        .attr("clip-path", $$.clipPath)
+        .attr("clip-path", /*$$.clipPath*/ $$.clipPathForSubchart)  // mjg
         .attr("class", CLASS.brush)
         .call($$.brush);
 

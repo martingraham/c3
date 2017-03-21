@@ -23,13 +23,7 @@ c3_chart_internal_fn.updateRegion = function (duration) {
 };
 c3_chart_internal_fn.redrawRegion = function (withTransition) {
     var $$ = this,
-        regions = $$.mainRegion.selectAll('rect').each(function () {
-            // data is binded to g and it's not transferred to rect (child node) automatically,
-            // then data of each rect has to be updated manually.
-            // TODO: there should be more efficient way to solve this?
-            var parentData = $$.d3.select(this.parentNode).datum();
-            $$.d3.select(this).datum(parentData);
-        }),
+        regions = $$.mainRegion.select('rect'),
         x = $$.regionX.bind($$),
         y = $$.regionY.bind($$),
         w = $$.regionWidth.bind($$),
