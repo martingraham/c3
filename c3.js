@@ -3,11 +3,7 @@
 
     /*global define, module, exports, require */
 
-<<<<<<< HEAD
-    var c3 = { version: "0.4.11-rc4" };
-=======
     var c3 = { version: "0.4.11" };
->>>>>>> pr/1
     
     var c3_chart_fn,
         c3_chart_internal_fn,
@@ -3143,11 +3139,7 @@
                 return config.data_groups.length > 0 ? getPoints(d, i)[1][1] : yScaleGetter.call($$, d.id)(d.value);
             };
     
-<<<<<<< HEAD
-        area = config.axis_rotated ? area.x0(value0).x1(value1).y(xValue) : area.x(xValue).y0(value0).y1(value1);
-=======
         area = config.axis_rotated ? area.x0(value0).x1(value1).y(xValue) : area.x(xValue).y0(config.area_above ? 0 : value0).y1(value1);
->>>>>>> pr/1
         if (!config.line_connectNull) {
             area = area.defined(function (d) { return d.value !== null; });
         }
@@ -3900,15 +3892,6 @@
             orderAsc = $$.isOrderAsc();
     
         if (config.data_groups.length === 0) {
-<<<<<<< HEAD
-            // mjg
-            /*  no sort
-            d.sort(function(a,b){
-                var av = a ? a.value : 0;
-                var bv = b ? b.value : 0;
-                return orderAsc ? av - bv : bv - av;
-            });  
-=======
                         // mjg
                 /*  no sort
                 d.sort(function(a,b){
@@ -3922,7 +3905,7 @@
                 var v1 = a ? a.value : null, v2 = b ? b.value : null;
                 return orderAsc ? v1 - v2 : v2 - v1;
             });
->>>>>>> pr/1
+    
             */
         } else {
             var ids = $$.orderTargets($$.data.targets).map(function (i) {
@@ -3946,12 +3929,8 @@
                 text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
             }
     
-<<<<<<< HEAD
-            value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
-=======
             value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d);
            // value = sanitise(valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d)); // mjg
->>>>>>> pr/1
             if (value !== undefined) {
                 // Skip elements when their name is set to null
                 if (d[i].name === null) { continue; }
@@ -4977,8 +4956,6 @@
         return format ? format(value, ratio, id) : $$.defaultArcValueFormat(value, ratio);
     };
     
-<<<<<<< HEAD
-=======
     c3_chart_internal_fn.textForGaugeMinMax = function (value, isMax) {
         var $$ = this,
             format = $$.getGaugeLabelExtents();
@@ -4986,7 +4963,6 @@
         return format ? format(value, isMax) : value;
     };
     
->>>>>>> pr/1
     c3_chart_internal_fn.expandArc = function (targetIds) {
         var $$ = this, interval;
     
@@ -5086,14 +5062,11 @@
         return format;
     };
     
-<<<<<<< HEAD
-=======
     c3_chart_internal_fn.getGaugeLabelExtents = function () {
         var $$ = this, config = $$.config;
         return config.gauge_label_extents;
     };
     
->>>>>>> pr/1
     c3_chart_internal_fn.getArcTitle = function () {
         var $$ = this;
         return $$.hasType('donut') ? $$.config.donut_title : "";
