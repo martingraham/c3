@@ -13,16 +13,17 @@ c3_chart_internal_fn.updateRegion = function (duration) {
     $$.mainRegion = $$.main.select('.' + CLASS.regions).selectAll('.' + CLASS.region)
         .data(config.regions);
     $$.mainRegion.enter().append('g')
-        .attr('class', $$.classRegion.bind($$))
       .append('rect')
         .style("fill-opacity", 0);
+    $$.mainRegion
+        .attr('class', $$.classRegion.bind($$));
     $$.mainRegion.exit().transition().duration(duration)
         .style("opacity", 0)
         .remove();
 };
 c3_chart_internal_fn.redrawRegion = function (withTransition) {
     var $$ = this,
-        regions = $$.mainRegion.selectAll('rect'),
+        regions = $$.mainRegion.select('rect'),
         x = $$.regionX.bind($$),
         y = $$.regionY.bind($$),
         w = $$.regionWidth.bind($$),
