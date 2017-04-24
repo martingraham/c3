@@ -868,7 +868,7 @@ c3_chart_internal_fn.updateSvgSize = function () {
         .attr('height', $$.getYAxisClipHeight.bind($$));
     $$.svg.select('#' + $$.clipIdForSubchart).select('rect')
         .attr('width', $$.width)
-        .attr('height', brush.size() ? brush.attr('height') : 0);
+        .attr('height', brush.size() ? (brush.attr('height') || 0) : 0);    // mjg
     $$.svg.select('.' + CLASS.zoomRect)
         .attr('width', $$.width)
         .attr('height', $$.height);
