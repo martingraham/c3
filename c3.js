@@ -3930,7 +3930,7 @@
             }
     
             value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d);
-           // value = sanitise(valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d)); // mjg
+            value = sanitise(valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index, d));
             if (value !== undefined) {
                 // Skip elements when their name is set to null
                 if (d[i].name === null) { continue; }
