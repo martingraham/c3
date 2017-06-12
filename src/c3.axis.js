@@ -299,7 +299,21 @@ export default function c3_axis(d3, params) {
             interval = tickOffset * 2;
         }
         else {
-            length = axis.g.select('path.domain').node().getTotalLength() - outerTickSize * 2;
+            //length = axis.g.select('path.domain').node().getTotalLength() - outerTickSize * 2;
+            // MJG, avoid getTotalLength doing reflow, below should work for axis paths
+            var dspec = axis.g.select('path.domain').attr("d");
+            length = dspec.split(/[A-Z]/).reduce(function(prev, cur) {
+
+                var coords = cur.split(",");
+                if (coords.length === 1) {
+                    return prev + Math.abs(+coords[0]);
+                } else {
+                    return prev + Math.sqrt (coords.reduce (function (p,c) {
+                        return p + (c * c);
+                    }, 0));
+                }
+            }, 0);
+            length -= (outerTickSize * 2);
             interval = length / axis.g.selectAll('line').size();
         }
         return interval === Infinity ? 0 : interval;
