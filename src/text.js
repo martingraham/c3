@@ -51,6 +51,23 @@ c3_chart_internal_fn.redrawText = function (xForText, yForText, forFlow, withTra
     ];
 };
 c3_chart_internal_fn.getTextRect = function (text, cls, element) {
+    // mjg, shove dummy node in svg and stop adding/removing it to avoid unnecessary reflows
+    var d3chart = this.svg; //d3.select(this.chart.element);
+    var dummy = d3chart.select("text.dummy");
+    var font = this.d3.select(element).style('font');
+    var rect;
+    if (dummy.empty()) {
+        d3chart.append("text").attr("class", "dummy");
+        dummy = d3chart.select("text.dummy");  
+    }
+    dummy
+        .style("visibility", "hidden")
+        .style("font", font)
+        .classed(cls ? cls : "", true)
+        .text(text)
+        .each(function () { rect = this.getBoundingClientRect(); })
+    ;
+    /*
     var dummy = this.d3.select('body').append('div').classed('c3', true),
         svg = dummy.append("svg").style('visibility', 'hidden').style('position', 'fixed').style('top', 0).style('left', 0),
         font = this.d3.select(element).style('font'),
@@ -63,6 +80,7 @@ c3_chart_internal_fn.getTextRect = function (text, cls, element) {
         .text(text)
       .each(function () { rect = this.getBoundingClientRect(); });
     dummy.remove();
+    */
     return rect;
 };
 c3_chart_internal_fn.generateXYForText = function (areaIndices, barIndices, lineIndices, forX) {

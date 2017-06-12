@@ -20,9 +20,11 @@ c3_chart_internal_fn.updateLegendWithDefaults = function () {
     var $$ = this;
     $$.updateLegend($$.mapToIds($$.data.targets), {withTransform: false, withTransitionForTransform: false, withTransition: false});
 };
-c3_chart_internal_fn.updateSizeForLegend = function (legendHeight, legendWidth) {
+// MJG, use precomputed top padding to save reflow and time
+c3_chart_internal_fn.updateSizeForLegend = function (legendHeight, legendWidth, preComputed) {
+    preComputed = preComputed || {};
     var $$ = this, config = $$.config, insetLegendPosition = {
-        top: $$.isLegendTop ? $$.getCurrentPaddingTop() + config.legend_inset_y + 5.5 : $$.currentHeight - legendHeight - $$.getCurrentPaddingBottom() - config.legend_inset_y,
+        top: $$.isLegendTop ? (preComputed.topPad != undefined ? preComputed.topPad : $$.getCurrentPaddingTop()) + config.legend_inset_y + 5.5 : $$.currentHeight - legendHeight - $$.getCurrentPaddingBottom() - config.legend_inset_y,
         left: $$.isLegendLeft ? $$.getCurrentPaddingLeft() + config.legend_inset_x + 0.5 : $$.currentWidth - legendWidth - $$.getCurrentPaddingRight() - config.legend_inset_x + 0.5
     };
 

@@ -376,13 +376,14 @@ c3_chart_internal_fn.updateSizes = function () {
     $$.currentHeight = $$.getCurrentHeight();
 
     // for main
+    var topPad = $$.getCurrentPaddingTop(); // MJG cache padding 'cos it's expensive to compute
     $$.margin = config.axis_rotated ? {
-        top: $$.getHorizontalAxisHeight('y2') + $$.getCurrentPaddingTop(),
+        top: $$.getHorizontalAxisHeight('y2') + topPad,
         right: hasArc ? 0 : $$.getCurrentPaddingRight(),
         bottom: $$.getHorizontalAxisHeight('y') + legendHeightForBottom + $$.getCurrentPaddingBottom(),
         left: subchartHeight + (hasArc ? 0 : $$.getCurrentPaddingLeft())
     } : {
-        top: 4 + $$.getCurrentPaddingTop(), // for top tick text
+        top: 4 + topPad, // for top tick text
         right: hasArc ? 0 : $$.getCurrentPaddingRight(),
         bottom: xAxisHeight + subchartHeight + legendHeightForBottom + $$.getCurrentPaddingBottom(),
         left: hasArc ? 0 : $$.getCurrentPaddingLeft()
@@ -408,7 +409,8 @@ c3_chart_internal_fn.updateSizes = function () {
         bottom: 0,
         left: 0
     };
-    if ($$.updateSizeForLegend) { $$.updateSizeForLegend(legendHeight, legendWidth); }
+    // Reuse top padding value - MJG
+    if ($$.updateSizeForLegend) { $$.updateSizeForLegend(legendHeight, legendWidth, {topPad: topPad}); }
 
     $$.width = $$.currentWidth - $$.margin.left - $$.margin.right;
     $$.height = $$.currentHeight - $$.margin.top - $$.margin.bottom;
