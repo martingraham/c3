@@ -104,7 +104,6 @@ c3_chart_internal_fn.getTooltipContent = function (d, defaultTitleFormat, defaul
         valueFormat = config.tooltip_format_value || defaultValueFormat,
         text, i, title, value, name, bgcolor;
 
-
     var tooltipSortFunction = this.getTooltipSortFunction();
     if(tooltipSortFunction) {
         d.sort(tooltipSortFunction);
