@@ -180,13 +180,22 @@ c3_chart_internal_fn.redrawSubchart = function (withSubchart, transitions, durat
 };
 c3_chart_internal_fn.redrawForBrush = function () {
     var $$ = this, x = $$.x;
-    $$.redraw({
-        withTransition: false,
-        withY: $$.config.zoom_rescale,
-        withSubchart: false,
-        withUpdateXDomain: true,
-        withDimension: false
-    });
+    // MJG - only redraw main chart if visible
+   if ($$.main.style("display") !== "none") {
+        $$.redraw({
+            withTransition: false,
+            withY: $$.config.zoom_rescale,
+            withSubchart: false,
+            withUpdateXDomain: true,
+            withDimension: false
+        });
+    } else {
+        var targetsToShow = $$.filterTargetsToShow($$.data.targets);
+        if (targetsToShow.length) {
+            $$.updateXDomain (targetsToShow, true, false, true);
+        }
+    }
+    // end MJG
     $$.config.subchart_onbrush.call($$.api, x.orgDomain());
 };
 c3_chart_internal_fn.transformContext = function (withTransition, transitions) {
