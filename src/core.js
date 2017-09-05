@@ -461,9 +461,17 @@ c3_chart_internal_fn.updateTargets = function (targets) {
 };
 c3_chart_internal_fn.showTargets = function () {
     var $$ = this;
-    $$.svg.selectAll('.' + CLASS.target).filter(function (d) { return $$.isTargetToShow(d.id); })
-      .transition().duration($$.config.transition_duration)
-        .style("opacity", 1);
+    $$.svg.selectAll('.' + CLASS.target)
+        // MJG - also hide targets that shouldn't be visible
+        .filter(function (d) {
+            var curOpacity = d3.select(this).style("opacity");
+            return $$.isTargetToShow(d.id) !== !!(+curOpacity);
+        })
+        .transition().duration($$.config.transition_duration).style("opacity", function(d) { return $$.isTargetToShow(d.id) ? 1 : 0; })
+    ;
+      //  .filter(function (d) { return $$.isTargetToShow(d.id); })
+      //.transition().duration($$.config.transition_duration)
+      //    .style("opacity", 1);
 };
 
 c3_chart_internal_fn.redraw = function (options, transitions) {

@@ -34,7 +34,10 @@ c3_chart_fn.hide = function (targetIds, options) {
     targets.transition()
         .style('opacity', 0, 'important')
         .call($$.endall, function () {
-            targets.style('opacity', null).style('opacity', 0);
+            targets.style('opacity', null)
+                .style('opacity', 0)
+        ;
+        
         });
 
     if (options.withLegend) {
