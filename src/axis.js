@@ -336,7 +336,22 @@ c3_axis_internal_fn.generateAxis = function () {
             interval = internal.tickOffset * 2;
         }
         else {
-            length = axis.g.select('path.domain').node().getTotalLength() - internal.outerTickSize * 2;
+            //length = axis.g.select('path.domain').node().getTotalLength() - internal.outerTickSize * 2;
+            // MJG, avoid getTotalLength doing reflow, below should work for axis paths
+            var dspec = axis.g.select('path.domain').attr("d");
+            length = dspec.split(/[A-Z]/).reduce(function(prev, cur) {
+
+                var coords = cur.split(",");
+                if (coords.length === 1) {
+                    return prev + Math.abs(+coords[0]);
+                } else {
+                    return prev + Math.sqrt (coords.reduce (function (p,c) {
+                        return p + (c * c);
+                    }, 0));
+                }
+            }, 0);
+            length -= (internal.outerTickSize * 2);
+            // MJG to here
             interval = length / axis.g.selectAll('line').size();
         }
         return interval === Infinity ? 0 : interval;
