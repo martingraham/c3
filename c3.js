@@ -564,7 +564,7 @@ c3_axis_internal_fn.generateAxis = function () {
             var dspec = axis.g.select('path.domain').attr("d");
             length = dspec.split(/[A-Z]/).reduce(function (prev, cur) {
 
-                var coords = cur.split(",");
+                var coords = cur.split(/[ ,]+/);
                 if (coords.length === 1) {
                     return prev + Math.abs(+coords[0]);
                 } else {
