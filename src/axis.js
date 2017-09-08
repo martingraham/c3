@@ -761,14 +761,25 @@ c3_axis_fn.generateTransitions = function generateTransitions(duration) {
         axisSubX: duration ? axes.subx.transition().duration(duration) : axes.subx
     };
 };
-c3_axis_fn.redraw = function redraw(transitions, isHidden) {
+c3_axis_fn.redraw = function redraw(transitions, isHidden, updateTheseAxes) {
+    // MJG. Don't update all axes if requested
+    updateTheseAxes = updateTheseAxes || ["axisX", "axisY", "axisY2", "axisSubX"];
+    var axisMap = {axisX: "xAxis", axisY: "yAxis", axisY2: "y2Axis", axisSubX: "subXAxis"};
     var $$ = this.owner;
     $$.axes.x.style("opacity", isHidden ? 0 : 1);
     $$.axes.y.style("opacity", isHidden ? 0 : 1);
     $$.axes.y2.style("opacity", isHidden ? 0 : 1);
     $$.axes.subx.style("opacity", isHidden ? 0 : 1);
-    transitions.axisX.call($$.xAxis);
-    transitions.axisY.call($$.yAxis);
-    transitions.axisY2.call($$.y2Axis);
-    transitions.axisSubX.call($$.subXAxis);
+    
+    updateTheseAxes.forEach (function (axisName) {
+        if (transitions[axisName]) {
+            transitions[axisName].call($$[axisMap[axisName]]);
+        }
+    }, this);
+    // end MJG
+    
+    //transitions.axisX.call($$.xAxis);
+    //transitions.axisY.call($$.yAxis);
+    //transitions.axisY2.call($$.y2Axis);
+    //transitions.axisSubX.call($$.subXAxis);
 };

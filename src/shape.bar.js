@@ -80,11 +80,12 @@ c3_chart_internal_fn.generateDrawBar = function (barIndices, isSub) {
         var indexX = config.axis_rotated ? 1 : 0;
         var indexY = config.axis_rotated ? 0 : 1;
 
-        var path = 'M ' + points[0][indexX] + ',' + points[0][indexY] + ' ' +
-                'L' + points[1][indexX] + ',' + points[1][indexY] + ' ' +
-                'L' + points[2][indexX] + ',' + points[2][indexY] + ' ' +
-                'L' + points[3][indexX] + ',' + points[3][indexY] + ' ' +
-                'z';
+        // MJG. cut down number of concatenations, " L" not " " + "L"
+        var path = 'M ' + points[0][indexX] + ',' + points[0][indexY] +
+                ' L' + points[1][indexX] + ',' + points[1][indexY] +
+                ' L' + points[2][indexX] + ',' + points[2][indexY] +
+                ' L' + points[3][indexX] + ',' + points[3][indexY] +
+                ' z';
 
         return path;
     };

@@ -482,6 +482,11 @@ c3_chart_internal_fn.redraw = function (options, transitions) {
     withDimension = getOption(options, "withDimension", true);
     withTransitionForExit = getOption(options, "withTransitionForExit", withTransition);
     withTransitionForAxis = getOption(options, "withTransitionForAxis", withTransition);
+    
+    var updateTheseAxes = getOption (options, "withTheseAxes", null);   // MJG
+    if (withLegend) {
+        updateTheseAxes = null;
+    }
 
     duration = withTransition ? config.transition_duration : 0;
     durationForExit = withTransitionForExit ? duration : 0;
@@ -528,7 +533,7 @@ c3_chart_internal_fn.redraw = function (options, transitions) {
     }
 
     // axes
-    $$.axis.redraw(transitions, hideAxis);
+    $$.axis.redraw(transitions, hideAxis, updateTheseAxes); // MJG
 
     // Update axis label
     $$.axis.updateLabels(withTransition);
