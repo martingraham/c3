@@ -111,6 +111,11 @@ c3_axis_internal_fn.isVertical = function () {
 c3_axis_internal_fn.tspanData = function (d, i, ticks, scale) {
     var internal = this;
     var splitted = internal.params.tickMultiline ? internal.splitTickText(d, ticks, scale) : [].concat(internal.textFormatted(d));
+
+    if (internal.params.tickMultiline && internal.params.tickMultilineMax > 0) {
+        splitted = internal.ellipsify(splitted, internal.params.tickMultilineMax);
+    }
+
     return splitted.map(function (s) {
         return { index: i, splitted: s, length: splitted.length };
     });
@@ -149,6 +154,27 @@ c3_axis_internal_fn.splitTickText = function (d, ticks, scale) {
     }
 
     return split(splitted, tickText + "");
+};
+c3_axis_internal_fn.ellipsify = function(splitted, max) {
+    if (splitted.length <= max) {
+        return splitted;
+    }
+
+    var ellipsified = splitted.slice(0, max);
+    var remaining = 3;
+    for (var i = max-1 ; i >= 0 ; i--) {
+        var available = ellipsified[i].length;
+
+        ellipsified[i] = ellipsified[i].substr(0, available-remaining).padEnd(available, '.');
+
+        remaining -= available;
+
+        if (remaining <= 0) {
+            break;
+        }
+    }
+
+    return ellipsified;
 };
 c3_axis_internal_fn.updateTickLength = function () {
     var internal = this;
@@ -255,13 +281,16 @@ c3_axis_internal_fn.generateAxis = function () {
                 {
                     // TODO: rotated tick text
                     tickTransform = internal.axisX;
-                    lineUpdate.attr("x2", 0)
-                        .attr("y2", -internal.innerTickSize);
+                    lineUpdate.attr("x1", tickX)
+                        .attr("x2", tickX)
+                        .attr("y2", function (d, i) { return -1 * internal.lineY2(d, i); });
                     textUpdate.attr("x", 0)
-                        .attr("y", -internal.tickLength)
-                        .style("text-anchor", "middle");
+                        .attr("y", function (d, i) { return -1 * internal.textY(d, i) - (params.isCategory ? 2 : (internal.tickLength - 2)); })
+                        .attr("transform", function (d, i) { return internal.textTransform(d, i); })
+                        .style("text-anchor", function (d, i) { return internal.textTextAnchor(d, i); });
                     tspanUpdate.attr('x', 0)
-                        .attr("dy", "0em");
+                        .attr("dy", function (d, i) { return internal.tspanDy(d, i); })
+                        .attr('dx', function (d, i) { return internal.tspanDx(d, i); });
                     pathUpdate.attr("d", "M" + internal.range[0] + "," + -internal.outerTickSize + "V0H" + internal.range[1] + "V" + -internal.outerTickSize);
                     break;
                 }
@@ -283,9 +312,10 @@ c3_axis_internal_fn.generateAxis = function () {
                 {
                     tickTransform = internal.axisY;
                     lineUpdate.attr("x2", internal.innerTickSize)
-                        .attr("y2", 0);
+                        .attr("y1", tickY)
+                        .attr("y2", tickY);
                     textUpdate.attr("x", internal.tickLength)
-                        .attr("y", 0)
+                        .attr("y", internal.tickOffset)
                         .style("text-anchor", "start");
                     tspanUpdate.attr('x', internal.tickLength)
                         .attr("dy", function (d, i) { return internal.tspanDy(d, i); });
@@ -400,7 +430,7 @@ c3_axis_fn.init = function init() {
     var $$ = this.owner, config = $$.config, main = $$.main;
     $$.axes.x = main.append("g")
         .attr("class", CLASS.axis + ' ' + CLASS.axisX)
-        .attr("clip-path", $$.clipPathForXAxis)
+        .attr("clip-path", config.axis_x_inner ? "" : $$.clipPathForXAxis)
         .attr("transform", $$.getTranslate('x'))
         .style("visibility", config.axis_x_show ? 'visible' : 'hidden');
     $$.axes.x.append("text")
@@ -433,6 +463,7 @@ c3_axis_fn.getXAxis = function getXAxis(scale, orient, tickFormat, tickValues, w
             isCategory: $$.isCategorized(),
             withOuterTick: withOuterTick,
             tickMultiline: config.axis_x_tick_multiline,
+            tickMultilineMax: config.axis_x_tick_multiline ? Number(config.axis_x_tick_multilineMax) : 0,
             tickWidth: config.axis_x_tick_width,
             tickTextRotate: withoutRotateTickText ? 0 : config.axis_x_tick_rotate,
             withoutTransition: withoutTransition,
@@ -621,7 +652,7 @@ c3_axis_fn.dyForXAxisLabel = function dyForXAxisLabel() {
     var $$ = this.owner, config = $$.config,
         position = this.getXAxisLabelPosition();
     if (config.axis_rotated) {
-        return position.isInner ? "1.2em" : -25 - this.getMaxTickWidth('x');
+        return position.isInner ? "1.2em" : -25 - ($$.config.axis_x_inner ? 0 : this.getMaxTickWidth('x'));
     } else {
         return position.isInner ? "-0.5em" : config.axis_x_height ? config.axis_x_height - 10 : "3em";
     }

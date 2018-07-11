@@ -107,6 +107,7 @@ c3_chart_internal_fn.getDefaultConfig = function () {
         axis_x_tick_rotate: 0,
         axis_x_tick_outer: true,
         axis_x_tick_multiline: true,
+        axis_x_tick_multilineMax: 0,
         axis_x_tick_width: null,
         axis_x_max: undefined,
         axis_x_min: undefined,
@@ -114,6 +115,7 @@ c3_chart_internal_fn.getDefaultConfig = function () {
         axis_x_height: undefined,
         axis_x_extent: undefined,
         axis_x_label: {},
+        axis_x_inner: undefined,
         axis_y_show: true,
         axis_y_type: undefined,
         axis_y_max: undefined,
@@ -184,6 +186,7 @@ c3_chart_internal_fn.getDefaultConfig = function () {
         // gauge
         gauge_fullCircle: false,
         gauge_label_show: true,
+        gauge_labelLine_show: true,
         gauge_label_format: undefined,
         gauge_min: 0,
         gauge_max: 100,
@@ -191,6 +194,7 @@ c3_chart_internal_fn.getDefaultConfig = function () {
         gauge_label_extents: undefined,
         gauge_units: undefined,
         gauge_width: undefined,
+        gauge_arcs_minWidth: 5,
         gauge_expand: {},
         gauge_expand_duration: 50,
         // donut
